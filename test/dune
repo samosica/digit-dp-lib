@@ -1,0 +1,6 @@
+(library
+ (name test)
+ (libraries DigitDPLib)
+ (inline_tests)
+ (preprocess (pps ppx_inline_test ppx_expect))
+ (flags (:standard -warn-error -A)))
