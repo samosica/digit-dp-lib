@@ -26,6 +26,16 @@ let union (Automaton a1) (Automaton a2) =
  
 let complement (Automaton a) =
   Automaton { a with accepts = fun s -> not (a.accepts s) }
+
+let true_automaton () =
+  Automaton { init_state = ();
+              trans = (fun _ _ -> ((), ()));
+              accepts = Fun.const true }
+
+let false_automaton () =
+  Automaton { init_state = ();
+              trans = (fun _ _ -> ((), ()));
+              accepts = Fun.const false }
  
 let for_all p =
   Automaton
@@ -38,8 +48,3 @@ let exists p =
     { init_state = false;
       trans = (fun i b -> ((), b || p i));
       accepts = Fun.id }
- 
-let min_automaton () =
-  Automaton { init_state = ();
-              trans = (fun _ _ -> ((), ()));
-              accepts = Fun.const true }

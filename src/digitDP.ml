@@ -246,7 +246,7 @@ let run (type m)
   let alpha = List.map (fun vals -> List.combine vars vals) (rep (List.length vars) alpha) in
   let Constraint g =
     match cs with
-      [] -> Constraint (fun _ _ -> min_automaton ())
+      [] -> Constraint (fun _ _ -> true_automaton ())
     | c :: cs -> List.fold_left intersect c cs in
   AutomatonDP.run (module M) ~mul ~accept_val ~alpha ~len (g permit_overflow radix)
  
