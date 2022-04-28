@@ -6,11 +6,11 @@ open DigitDPLib
 open DigitDP
 
 let unfair_nim a =
-  let a0 :: a1 :: rest = a in
+  let a1 :: a2 :: rest = a in
   let r = List.fold_left (lxor) 0 rest in
   let cs = 
-    [ cint_of_rel (var "x" <@ int a0);
-      cint_of_rel ((int a0 -@ var "x") ^@ (int a1 +@ var "x") =@ int r) ] in
+    [ cint_of_rel (var "x" <@ int a1);
+      cint_of_rel ((int a1 -@ var "x") ^@ (int a2 +@ var "x") =@ int r) ] in
   let module M = struct
       type t = int option
       let zero = None
