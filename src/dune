@@ -1,2 +1,3 @@
 (library
- (name DigitDPLib))
+ (name DigitDPLib)
+ (public_name digit-dp-lib))
