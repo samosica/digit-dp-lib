@@ -1,0 +1,46 @@
+name: Workflow
+on:
+  push:
+    branches:
+      - main
+jobs:
+  test:
+    name: Test DigitDPLib
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ocaml/setup-ocaml@v2
+        with:
+          ocaml-compiler: 4.10.x
+          dune-cache: true
+      - run: opam install . --deps-only --with-test
+      - run: opam exec -- dune runtest
+  pack:
+    name: Pack DigitDPLib into a single file
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
+        with:
+          python-version: '3.8.x'
+      - name: Pack
+        run: |
+          set -x
+          mkdir -p dist
+          python3 pack.py -o dist/DigitDPLib.ml
+      - name: Diff
+        id: diff
+        run: |
+          set -x
+          git add -N dist/DigitDPLib.ml
+          git diff --quiet --exit-code dist/DigitDPLib.ml
+        continue-on-error: true
+      - name: Commit and Push
+        run: |
+          set -x
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -am "Pack DigitDPLib"
+          git push
+        if: steps.diff.outcome == 'failure'
